@@ -2,13 +2,13 @@ package main
 
 import (
 	"database/sql"
-	"github/iavianm/blogaggregator/internal/config"
-	"github/iavianm/blogaggregator/internal/database"
 	"log"
 	"os"
-)
 
-import _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
+	"github/iavianm/blogaggregator/internal/config"
+	"github/iavianm/blogaggregator/internal/database"
+)
 
 type state struct {
 	db  *database.Queries
@@ -39,7 +39,9 @@ func main() {
 	cmds.register("login", handlerLogin)
 	cmds.register("register", handlerRegister)
 	cmds.register("reset", handlerReset)
-	cmds.register("users", handlerGetUsers)
+	cmds.register("users", handlerListUsers)
+	cmds.register("agg", handlerAgg)
+	cmds.register("addfeed", handlerAddFeed)
 
 	if len(os.Args) < 2 {
 		log.Fatal("Usage: cli <command> [args...]")

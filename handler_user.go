@@ -55,30 +55,22 @@ func handlerLogin(s *state, cmd command) error {
 	return nil
 }
 
+func handlerListUsers(s *state, cmd command) error {
+	users, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return fmt.Errorf("couldn't list users: %w", err)
+	}
+	for _, user := range users {
+		if user.Name == s.cfg.CurrentUserName {
+			fmt.Printf("* %v (current)\n", user.Name)
+			continue
+		}
+		fmt.Printf("* %v\n", user.Name)
+	}
+	return nil
+}
+
 func printUser(user database.User) {
 	fmt.Printf(" * ID:      %v\n", user.ID)
 	fmt.Printf(" * Name:    %v\n", user.Name)
-}
-
-func handlerReset(s *state, cmd command) error {
-	err := s.db.Reset(context.Background())
-	if err != nil {
-		return fmt.Errorf("couldn't reset user: %w", err)
-	}
-	return nil
-}
-
-func handlerGetUsers(s *state, cmd command) error {
-	users, err := s.db.GetUsers(context.Background())
-	if err != nil {
-		return fmt.Errorf("couldn't get users: %w", err)
-	}
-	for _, user := range users {
-		if s.cfg.CurrentUserName == user {
-			fmt.Printf("%v (current)\n", user)
-			continue
-		}
-		fmt.Println(user)
-	}
-	return nil
 }
